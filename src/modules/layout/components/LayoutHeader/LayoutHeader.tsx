@@ -7,6 +7,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { CaretDoubleRight } from "@phosphor-icons/react";
+import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
 
 export function LayoutHeader() {
@@ -17,8 +18,8 @@ export function LayoutHeader() {
   return (
     <AppBar
       elevation={0}
-      sx={{ width: "100%", bgcolor: "background.default" }}
       position="relative"
+      sx={{ width: "100%", bgcolor: "background.default", zIndex: 1201 }}
     >
       <Toolbar disableGutters>
         <Stack
@@ -37,10 +38,18 @@ export function LayoutHeader() {
             )}
             <Stack direction="row" alignItems="center" gap={0.5}>
               <Box p={0.5}>
-                <CaretDoubleRight size={12} color={theme.palette.grey[700]} />
+                <CaretDoubleRight
+                  size={12}
+                  color={theme.palette.grey[700]}
+                  weight="bold"
+                />
               </Box>
-              <Typography variant="body2" color="grey.700">
-                May 19, 2023
+              <Typography
+                variant="body2"
+                color="grey.700"
+                textTransform="capitalize"
+              >
+                {dayjs(new Date()).locale("pt-br").format("MMM DD, YYYY")}
               </Typography>
             </Stack>
           </Stack>

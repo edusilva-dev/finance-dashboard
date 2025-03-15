@@ -1,5 +1,5 @@
 import { Page, PageContent } from "@modules/page";
-import { Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 export function Home() {
   return (
@@ -8,6 +8,17 @@ export function Home() {
         <Typography variant="h1" fontWeight={700}>
           Home
         </Typography>
+        <Stack gap={10}>
+          {Array.from({ length: 10 }).map(() => (
+            <Box
+              sx={{
+                width: "50px",
+                height: "50px",
+                bgcolor: "primary.main",
+              }}
+            ></Box>
+          ))}
+        </Stack>
       </PageContent>
     </Page>
   );

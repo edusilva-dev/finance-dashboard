@@ -12,6 +12,7 @@ export function SideMenu(props: PropsWithChildren) {
       py={6}
       px={3.5}
       justifyContent="space-between"
+      zIndex={1201}
     >
       {children}
     </Stack>

@@ -1,16 +1,18 @@
 import { Stack, Typography, useTheme } from "@mui/material";
 import { IconProps } from "@phosphor-icons/react";
-import { ComponentType } from "react";
+import { ComponentType, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 type SideMenuItemProps = {
   label: string;
   path: string;
   Icon?: ComponentType<IconProps>;
+  alwaysActive?: boolean;
+  opacity?: number;
 };
 
 export function SideMenuItem(props: SideMenuItemProps) {
-  const { label, Icon, path } = props;
+  const { label, Icon, path, alwaysActive = false, opacity } = props;
 
   const location = useLocation();
 
@@ -20,6 +22,26 @@ export function SideMenuItem(props: SideMenuItemProps) {
     path === "/"
       ? location.pathname === "/"
       : location.pathname.startsWith(path);
+
+  const getBackgroundColor = useCallback(() => {
+    if (alwaysActive) {
+      return theme.palette.grey.A700;
+    }
+
+    if (isActive) {
+      return theme.palette.primary.main;
+    }
+
+    return "transparent";
+  }, [isActive, alwaysActive]);
+
+  const getFontColor = useCallback(() => {
+    if (alwaysActive || isActive) {
+      return theme.palette.common.white;
+    }
+
+    return theme.palette.grey.A400;
+  }, [isActive, alwaysActive]);
 
   return (
     <Link to={path} style={{ textDecoration: "none" }}>
@@ -31,11 +53,17 @@ export function SideMenuItem(props: SideMenuItemProps) {
         py={1.5}
         sx={{
           borderRadius: (theme) => theme.shape.borderRadius,
-          bgcolor: isActive ? theme.palette.primary.main : "transparent",
+          bgcolor: getBackgroundColor(),
           cursor: "pointer",
           transition: "all 0.12s ease",
+          opacity: opacity || 1,
           [":hover"]: {
-            bgcolor: theme.palette.primary.main,
+            ["& p"]: {
+              color: theme.palette.common.white,
+            },
+            ...(!alwaysActive
+              ? { bgcolor: theme.palette.primary.main }
+              : { opacity: 1 }),
           },
         }}
       >
@@ -47,7 +75,14 @@ export function SideMenuItem(props: SideMenuItemProps) {
             }
           />
         )}
-        <Typography variant="body1" fontWeight={600} color="white">
+        <Typography
+          variant="body1"
+          fontWeight={600}
+          color={getFontColor()}
+          sx={{
+            transition: "all 0.12s ease",
+          }}
+        >
           {label}
         </Typography>
       </Stack>
